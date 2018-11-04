@@ -15,7 +15,12 @@ const create = async function(req, res){
         [err, user] = await to(authService.createUser(body));
 
         if(err) return ReE(res, err, 422);
-        return ReS(res, {message:'Successfully created new user.', user:user.toWeb(), token:user.getJWT()}, 201);
+        // For some reason dont send password back to users event it hash
+        user.password = "";
+        return ReS(res, { message:'Successfully created new user.',
+            user: user.toWeb(),
+            token: user.getJWT()
+        }, 201);
     }
 }
 module.exports.create = create;
